@@ -15,7 +15,8 @@ import {
     Award,
     ChevronRight,
     Menu,
-    X
+    X,
+    FileText
 } from 'lucide-react';
 
 // --- Types ---
@@ -34,6 +35,7 @@ interface Experience {
     period: string;
     location: string;
     description: string[];
+    logo?: string;
 }
 
 interface Education {
@@ -41,6 +43,7 @@ interface Education {
     degree: string;
     period: string;
     grade: string;
+    logo?: string;
 }
 
 // --- Data ---
@@ -83,19 +86,22 @@ const DATA: {
             school: "Tulsiramji Gaikwad Patil College of Engineering and Technology, Nagpur",
             degree: "B.Tech in Computer Science and Engineering",
             period: "2022 – 2025",
-            grade: "CGPA: 8.8"
+            grade: "CGPA: 8.8",
+            logo: "https://tgpcet.com/assets/img/logo.png"
         },
         {
             school: "Yeshwant Mahavidyalaya, Nanded",
             degree: "12th (Physics, Chemistry, Mathematics)",
             period: "2020 – 2021",
-            grade: "92.5%"
+            grade: "92.5%",
+            logo: "https://ymnnanded.in/images/WhatsApp_Image_2023-01-13_at_12.38.41-removebg-preview.png"
         },
         {
             school: "RSCS Sainiki School, Nanded",
             degree: "10th",
             period: "2019",
-            grade: "88%"
+            grade: "88%",
+            logo: "https://sainikischoolsagroli.in/wp-content/uploads/2025/07/Sainiki_LOGO-removebg-preview.png"
         }
     ],
     experience: [
@@ -104,6 +110,7 @@ const DATA: {
             role: "Full Stack Developer Intern",
             period: "Dec 2024 – Mar 2025",
             location: "Nagpur, Maharashtra",
+            logo: "https://tnpportal.harittech.in/static/media/harit.feeaf3f71a001be729ef.png",
             description: [
                 "Built and deployed TNP Portal with Role-Based Access Control (RBAC), job posting workflows and admin dashboards using React, Node, Express, MongoDB.",
                 "Delivered 3 full-stack client projects focusing on performance, security, and responsive UI.",
@@ -115,6 +122,7 @@ const DATA: {
             role: "Full Stack Developer Intern",
             period: "Mar 2024 – Aug 2024",
             location: "Shrigonda, Maharashtra",
+            logo: "https://avatars.githubusercontent.com/u/169677699?v=4",
             description: [
                 "Developed SEO-optimized website using Next.js, Node.js, MongoDB, and Tailwind CSS.",
                 "Built REST APIs with Express and integrated middleware with JWT Authentication."
@@ -125,6 +133,7 @@ const DATA: {
             role: "AI/ML Virtual Intern",
             period: "Jan 2024 – Mar 2024",
             location: "Remote",
+            logo: "https://eduskillsfoundation.org/wp-content/uploads/2022/09/LOGO_EduSkills.png",
             description: [
                 "Worked on TensorFlow models including preprocessing, training, evaluation and deployment strategies.",
                 "Used Python with NumPy, Pandas, and Matplotlib for data engineering pipelines."
@@ -135,6 +144,7 @@ const DATA: {
             role: "Frontend Intern",
             period: "Dec 2023 – Mar 2024",
             location: "Hyderabad, Telangana",
+            logo: "https://slashmark.in/partnerimages/slashmarkmainlogo.png",
             description: [
                 "Built responsive React components, integrated REST and GraphQL APIs.",
                 "Worked with Redux Toolkit for global state management."
@@ -290,6 +300,125 @@ const SectionHeading = ({ children, subtitle }: { children: React.ReactNode, sub
     </div>
 );
 
+const ContactForm = () => {
+    const [result, setResult] = useState("");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+    const onSubmit = async (event: any) => {
+        event.preventDefault();
+        setStatus("loading");
+        setResult("Sending....");
+        const formData = new FormData(event.target);
+        formData.append("access_key", "a849a92b-8d67-44d9-b6ac-ed0fcb8b90fe");
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                setStatus("success");
+                setResult("Message sent successfully!");
+                event.target.reset();
+                setTimeout(() => {
+                    setResult("");
+                    setStatus("idle");
+                }, 5000);
+            } else {
+                setStatus("error");
+                setResult(data.message || "Something went wrong.");
+            }
+        } catch (error) {
+            setStatus("error");
+            setResult("Failed to send message.");
+        }
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass-card p-8 md:p-12 rounded-[2rem] max-w-3xl mx-auto border-white/5 hover:border-primary-500/20 transition-all shadow-2xl relative overflow-hidden group"
+        >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 blur-3xl -mr-16 -mt-16 group-hover:bg-primary-500/10 transition-all" />
+
+            <form onSubmit={onSubmit} className="space-y-8 text-left relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Full Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            required
+                            placeholder="Your Name"
+                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all font-medium"
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Email Address</label>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="hello@example.com"
+                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all font-medium"
+                        />
+                    </div>
+                </div>
+                <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Message</label>
+                    <textarea
+                        name="message"
+                        required
+                        rows={5}
+                        placeholder="Tell me about your project or just say hi..."
+                        className="w-full bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all resize-none font-medium"
+                    ></textarea>
+                </div>
+
+                <div className="flex flex-col items-center gap-6">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        disabled={status === "loading"}
+                        className="w-full md:w-auto md:px-12 py-5 bg-primary-600 hover:bg-primary-500 disabled:bg-slate-800 disabled:cursor-not-allowed text-white rounded-2xl font-black uppercase tracking-[0.15em] flex items-center justify-center gap-3 shadow-2xl shadow-primary-900/40 transition-all group/btn"
+                    >
+                        {status === "loading" ? (
+                            <span className="flex items-center gap-2">
+                                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                Processing
+                            </span>
+                        ) : (
+                            <>
+                                Send Message <ChevronRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                            </>
+                        )}
+                    </motion.button>
+
+                    <AnimatePresence>
+                        {result && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-full border ${status === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                                    } text-xs font-bold uppercase tracking-widest`}
+                            >
+                                <div className={`w-1.5 h-1.5 rounded-full ${status === 'success' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                                {result}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </form>
+        </motion.div>
+    );
+};
+
 const App: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#020617] text-slate-100 selection:bg-primary-500/30">
@@ -314,9 +443,16 @@ const App: React.FC = () => {
                             </p>
 
                             <div className="flex flex-wrap gap-4 mb-12 justify-center lg:justify-start">
-                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-primary-900/40 transition-all">
-                                    Exploration <ChevronRight size={20} />
-                                </motion.button>
+                                <motion.a
+                                    href="/Mahesh_Shinde_Resume.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-primary-900/40 transition-all cursor-pointer"
+                                >
+                                    View Resume <FileText size={20} />
+                                </motion.a>
                                 <div className="flex gap-4">
                                     {[{ icon: <Github size={24} />, href: DATA.contact.github }, { icon: <Linkedin size={24} />, href: DATA.contact.linkedin }].map((s, i) => (
                                         <motion.a key={i} href={s.href} target="_blank" whileHover={{ y: -5, scale: 1.1 }} className="w-14 h-14 glass-card rounded-xl flex items-center justify-center text-slate-300 hover:text-primary-400 border-white/10 hover:border-primary-500/50 transition-all">{s.icon}</motion.a>
@@ -346,9 +482,16 @@ const App: React.FC = () => {
                     <div className="space-y-6 max-w-5xl">
                         {DATA.experience.map((exp, i) => (
                             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-card p-8 rounded-3xl flex flex-col md:flex-row gap-8 hover:border-primary-500/30 transition-all group">
-                                <div className="md:w-1/4">
-                                    <span className="text-primary-400 font-black text-sm uppercase tracking-widest block mb-2">{exp.period}</span>
-                                    <p className="text-slate-500 font-mono text-xs uppercase">{exp.location}</p>
+                                <div className="md:w-1/4 flex flex-col gap-4">
+                                    {exp.logo && (
+                                        <div className="w-16 h-16 rounded-2xl bg-white/5 p-2 border border-white/10 flex items-center justify-center overflow-hidden">
+                                            <img src={exp.logo} alt={exp.company} className="w-full h-full object-contain" />
+                                        </div>
+                                    )}
+                                    <div>
+                                        <span className="text-primary-400 font-black text-sm uppercase tracking-widest block mb-2">{exp.period}</span>
+                                        <p className="text-slate-500 font-mono text-xs uppercase">{exp.location}</p>
+                                    </div>
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-1 group-hover:text-primary-400 transition-colors italic">{exp.role}</h3>
@@ -443,8 +586,14 @@ const App: React.FC = () => {
                         <SectionHeading>Academic History</SectionHeading>
                         <div className="space-y-8">
                             {DATA.education.map((e, i) => (
-                                <div key={i} className="flex gap-6">
-                                    <div className="w-14 h-14 glass-card rounded-2xl flex items-center justify-center text-primary-500 shrink-0 border-white/10"><GraduationCap size={28} /></div>
+                                <div key={i} className="flex gap-6 items-start">
+                                    <div className="w-16 h-16 glass-card rounded-2xl flex items-center justify-center text-primary-500 shrink-0 border-white/10 p-2 overflow-hidden bg-white/5">
+                                        {e.logo ? (
+                                            <img src={e.logo} alt={e.school} className="w-full h-full object-contain" />
+                                        ) : (
+                                            <GraduationCap size={28} />
+                                        )}
+                                    </div>
                                     <div>
                                         <h4 className="text-lg font-black uppercase italic tracking-tight mb-1">{e.school}</h4>
                                         <p className="text-primary-400 text-sm font-bold uppercase mb-2">{e.degree}</p>
@@ -463,12 +612,17 @@ const App: React.FC = () => {
                 <div className="container mx-auto px-6 relative z-10 text-center">
                     <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter mb-8 leading-none">Initiate <span className="text-gradient underline decoration-primary-500/20">Contact</span></h2>
                     <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-16 uppercase tracking-widest font-light">Nagpur-based Engineering • Full Stack Solutions • Global Outreach</p>
-                    <div className="flex flex-col md:flex-row justify-center gap-8 items-center">
-                        <a href={`mailto:${DATA.contact.email}`} className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white hover:text-primary-400 transition-all flex items-center gap-4 group">
-                            <Mail size={40} className="text-primary-500 group-hover:scale-110 transition-transform" /> {DATA.contact.email}
-                        </a>
-                        <span className="hidden md:block text-slate-800 text-4xl font-black">/</span>
-                        <a href={`tel:${DATA.contact.phone}`} className="text-2xl font-black uppercase tracking-widest text-slate-500 hover:text-white transition-all italic">{DATA.contact.phone}</a>
+
+                    <div className="grid grid-cols-1 gap-16 items-start">
+                        <ContactForm />
+
+                        <div className="flex flex-col md:flex-row justify-center gap-12 items-center mt-8">
+                            <a href={`mailto:${DATA.contact.email}`} className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-white hover:text-primary-400 transition-all flex items-center gap-4 group">
+                                <Mail size={32} className="text-primary-500 group-hover:scale-110 transition-transform" /> {DATA.contact.email}
+                            </a>
+                            <span className="hidden md:block text-slate-800 text-3xl font-black">/</span>
+                            <a href={`tel:${DATA.contact.phone}`} className="text-xl font-black uppercase tracking-widest text-slate-500 hover:text-white transition-all italic">{DATA.contact.phone}</a>
+                        </div>
                     </div>
                 </div>
             </section>
