@@ -87,14 +87,14 @@ const DATA: {
             degree: "B.Tech in Computer Science and Engineering",
             period: "2022 – 2025",
             grade: "CGPA: 8.8",
-            logo: "https://tgpcet.com/assets/img/logo.png"
+            logo: "/tgpcet.jpg"
         },
         {
             school: "Yeshwant Mahavidyalaya, Nanded",
             degree: "12th (Physics, Chemistry, Mathematics)",
             period: "2020 – 2021",
             grade: "92.5%",
-            logo: "https://ymnnanded.in/images/WhatsApp_Image_2023-01-13_at_12.38.41-removebg-preview.png"
+            logo: "/yeshwant.jpg"
         },
         {
             school: "RSCS Sainiki School, Nanded",
