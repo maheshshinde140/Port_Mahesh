@@ -36,6 +36,7 @@ interface Experience {
     location: string;
     description: string[];
     logo?: string;
+    certificateUrl?: string; // Strict view only
 }
 
 interface Education {
@@ -44,6 +45,12 @@ interface Education {
     period: string;
     grade: string;
     logo?: string;
+}
+
+interface Certification {
+    title: string;
+    issuer: string;
+    url: string;
 }
 
 // --- Data ---
@@ -69,7 +76,7 @@ const DATA: {
         tools: { name: string, logo: string }[];
         ai: { name: string, logo: string }[];
     };
-    certifications: string[];
+    certifications: Certification[];
 } = {
     name: "Mahesh Shinde",
     title: "Full Stack Software Engineer",
@@ -111,6 +118,7 @@ const DATA: {
             period: "Dec 2024 – Mar 2025",
             location: "Nagpur, Maharashtra",
             logo: "https://tnpportal.harittech.in/static/media/harit.feeaf3f71a001be729ef.png",
+            certificateUrl: "/certs/digitalhut.pdf",
             description: [
                 "Built and deployed TNP Portal with Role-Based Access Control (RBAC), job posting workflows and admin dashboards using React, Node, Express, MongoDB.",
                 "Delivered 3 full-stack client projects focusing on performance, security, and responsive UI.",
@@ -123,9 +131,22 @@ const DATA: {
             period: "Mar 2024 – Aug 2024",
             location: "Shrigonda, Maharashtra",
             logo: "https://avatars.githubusercontent.com/u/169677699?v=4",
+            certificateUrl: "/certs/arohi.pdf",
             description: [
                 "Developed SEO-optimized website using Next.js, Node.js, MongoDB, and Tailwind CSS.",
                 "Built REST APIs with Express and integrated middleware with JWT Authentication."
+            ]
+        },
+        {
+            company: "EduSkills Foundation",
+            role: "Intelligent Automation Virtual Intern (BluePrism)",
+            period: "Apr 2024 – Jun 2024",
+            location: "Remote",
+            logo: "https://eduskillsfoundation.org/wp-content/uploads/2022/09/LOGO_EduSkills.png",
+            certificateUrl: "/certs/intelligent_automation.pdf",
+            description: [
+                "Mastered Robotic Process Automation (RPA) design principles and BluePrism architecture.",
+                "Developed automated workflows for data entry and business process optimization."
             ]
         },
         {
@@ -134,9 +155,22 @@ const DATA: {
             period: "Jan 2024 – Mar 2024",
             location: "Remote",
             logo: "https://eduskillsfoundation.org/wp-content/uploads/2022/09/LOGO_EduSkills.png",
+            certificateUrl: "/certs/ai_ml_internship.pdf",
             description: [
                 "Worked on TensorFlow models including preprocessing, training, evaluation and deployment strategies.",
                 "Used Python with NumPy, Pandas, and Matplotlib for data engineering pipelines."
+            ]
+        },
+        {
+            company: "Clustor Computing",
+            role: "Full Stack Web Development Intern",
+            period: "Jan 2024 – Feb 2024",
+            location: "Nagpur, Maharashtra",
+            logo: "/clustor.jpg",
+            certificateUrl: "/certs/clustor.pdf",
+            description: [
+                "Built full-stack web applications using WordPress and MERN stack (MongoDB, Express.js, React, Node.js).",
+                "Designed database schemas and RESTful APIs to support frontend features."
             ]
         },
         {
@@ -145,6 +179,7 @@ const DATA: {
             period: "Dec 2023 – Mar 2024",
             location: "Hyderabad, Telangana",
             logo: "https://slashmark.in/partnerimages/slashmarkmainlogo.png",
+            certificateUrl: "/certs/slashmark.pdf",
             description: [
                 "Built responsive React components, integrated REST and GraphQL APIs.",
                 "Worked with Redux Toolkit for global state management."
@@ -229,11 +264,31 @@ const DATA: {
         ]
     },
     certifications: [
-        "Google – Prompt Design in Vertex AI",
-        "Google – Introduction to Large Language Models",
-        "Google – Introduction to Generative AI",
-        "TechSaksham – Foundation Course on Generative AI",
-        "Coursera – Full Stack Web Development (React + Node)"
+        {
+            title: "Prompt Design in Vertex AI",
+            issuer: "Google",
+            url: "https://www.credly.com/badges/71f815f1-a3b8-44f0-a7fe-47b23c2c8fab/linked_in_profile"
+        },
+        {
+            title: "Introduction to Large Language Models",
+            issuer: "Google",
+            url: "https://www.cloudskillsboost.google/public_profiles/63f1dd5a-f664-4803-8059-a043f7b6da78/badges/9039945?utm_medium=social&utm_source=linkedin&utm_campaign=ql-social-share"
+        },
+        {
+            title: "Introduction to Generative AI",
+            issuer: "Google",
+            url: "https://www.cloudskillsboost.google/public_profiles/63f1dd5a-f664-4803-8059-a043f7b6da78/badges/9039660?utm_medium=social&utm_source=linkedin&utm_campaign=ql-social-share"
+        },
+        {
+            title: "Foundation Course on Generative AI",
+            issuer: "TechSaksham",
+            url: "/certs/techsaksham.pdf"
+        },
+        {
+            title: "Full Stack Web Development",
+            issuer: "Coursera",
+            url: "#"
+        }
     ]
 };
 
@@ -259,7 +314,7 @@ const Navbar = () => {
 
     return (
         <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-card py-4 shadow-xl' : 'bg-transparent py-6'}`}>
-            <div className="container mx-auto px-6 flex justify-between items-center">
+            <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="text-2xl font-bold tracking-tight">
                     <span className="text-gradient">MS</span>
                 </motion.div>
@@ -273,11 +328,37 @@ const Navbar = () => {
             </div>
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden glass-card border-t border-white/5">
-                        <div className="flex flex-col p-6 gap-4">
-                            {navLinks.map((link) => (
-                                <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="text-lg text-slate-300 uppercase tracking-widest font-bold">{link.name}</a>
+                    <motion.div
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className="fixed inset-0 z-40 md:hidden bg-[#020617]/95 backdrop-blur-2xl"
+                    >
+                        <div className="flex flex-col items-center justify-center h-full gap-10">
+                            {navLinks.map((link, i) => (
+                                <motion.a
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.1 }}
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className="text-3xl font-black text-slate-100 uppercase tracking-[0.2em] italic hover:text-primary-400 transition-colors"
+                                >
+                                    {link.name}
+                                </motion.a>
                             ))}
+                            <motion.a
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                                href="#contact"
+                                onClick={() => setIsOpen(false)}
+                                className="px-10 py-4 rounded-full bg-primary-600 text-white text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary-900/40"
+                            >
+                                Hire Me
+                            </motion.a>
                         </div>
                     </motion.div>
                 )}
@@ -288,15 +369,15 @@ const Navbar = () => {
 
 const SectionHeading = ({ children, subtitle }: { children: React.ReactNode, subtitle?: string }) => (
     <div className="mb-12">
-        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter italic">
+        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 uppercase tracking-tighter italic">
             {children}
         </motion.h2>
         {subtitle && (
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-slate-400 max-w-2xl text-lg font-medium leading-relaxed">
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-slate-400 max-w-2xl text-lg md:text-xl font-medium leading-relaxed">
                 {subtitle}
             </motion.p>
         )}
-        <motion.div initial={{ width: 0 }} whileInView={{ width: 80 }} viewport={{ once: true }} className="h-1.5 bg-primary-500 mt-4 rounded-full shadow-[0_0_10px_#0ea5e9]" />
+        <motion.div initial={{ width: 0 }} whileInView={{ width: 80 }} viewport={{ once: true }} className="h-2 bg-primary-500 mt-4 rounded-full shadow-[0_0_15px_#0ea5e9]" />
     </div>
 );
 
@@ -341,7 +422,7 @@ const ContactForm = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="glass-card p-8 md:p-12 rounded-[2rem] max-w-3xl mx-auto border-white/5 hover:border-primary-500/20 transition-all shadow-2xl relative overflow-hidden group"
+            className="glass-card p-6 md:p-12 rounded-[2rem] max-w-3xl mx-auto border-white/5 hover:border-primary-500/20 transition-all shadow-2xl relative overflow-hidden group"
         >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 blur-3xl -mr-16 -mt-16 group-hover:bg-primary-500/10 transition-all" />
 
@@ -419,27 +500,102 @@ const ContactForm = () => {
     );
 };
 
+const PDFViewerModal = ({ url, isOpen, onClose }: { url: string; isOpen: boolean; onClose: () => void }) => {
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey && (e.key === 'p' || e.key === 's')) || e.key === 'F12') {
+                e.preventDefault();
+                alert("Downloading and printing is disabled for security reasons.");
+            }
+        };
+        if (isOpen) {
+            window.addEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'hidden';
+        }
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
+    if (!isOpen) return null;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#020617]/90 backdrop-blur-xl"
+            onContextMenu={(e) => e.preventDefault()}
+        >
+            <div className="relative w-full max-w-5xl h-[90vh] glass-card rounded-[2rem] overflow-hidden border-white/10 flex flex-col">
+                <div className="flex items-center justify-between p-6 border-b border-white/5">
+                    <h3 className="text-xl font-black uppercase italic tracking-widest text-primary-500">Document Viewer</h3>
+                    <button
+                        onClick={onClose}
+                        className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                    >
+                        <X size={24} />
+                    </button>
+                </div>
+
+                <div className="flex-1 relative bg-slate-900/50">
+                    <iframe
+                        src={`${url}#toolbar=0&navpanes=0&scrollbar=0`}
+                        className="w-full h-full border-none"
+                        title="PDF Viewer"
+                    />
+                    {/* Security Overlay to block right click and selection on iframe content */}
+                    <div className="absolute inset-0 z-10 pointer-events-none" />
+                </div>
+
+                <div className="p-4 bg-primary-600/10 text-center">
+                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary-400">Secure Viewing Mode Active • Download Disabled</p>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
 const App: React.FC = () => {
+    const [viewerOpen, setViewerOpen] = useState(false);
+    const [activeDoc, setActiveDoc] = useState("");
+
+    const openViewer = (url: string) => {
+        setActiveDoc(url);
+        setViewerOpen(true);
+    };
+
     return (
         <div className="min-h-screen bg-[#020617] text-slate-100 selection:bg-primary-500/30">
             <Navbar />
+
+            <AnimatePresence>
+                {viewerOpen && (
+                    <PDFViewerModal
+                        url={activeDoc}
+                        isOpen={viewerOpen}
+                        onClose={() => setViewerOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
 
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
                 <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-600/20 rounded-full blur-[128px] animate-pulse" />
                 <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-indigo-600/20 rounded-full blur-[128px] animate-pulse" />
 
-                <div className="container mx-auto px-6 z-10">
+                <div className="container mx-auto px-4 md:px-6 z-10">
                     <div className="flex flex-col lg:flex-row items-center gap-16">
                         <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="flex-1 text-center lg:text-left">
                             <h4 className="text-primary-400 font-mono mb-4 flex items-center justify-center lg:justify-start gap-2 text-lg uppercase tracking-widest">
                                 <Terminal size={20} /> Developer Portfolio
                             </h4>
-                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.0] uppercase italic">
-                                {DATA.name.split(' ')[0]} <br className="hidden lg:block" /><span className="text-gradient underline decoration-primary-500/30">{DATA.name.split(' ')[1]}</span>
+                            <h1 className="text-4xl md:text-7xl lg:text-9xl font-black mb-6 tracking-tight leading-[0.9] uppercase italic">
+                                {DATA.name.split(' ')[0]} <br /><span className="text-gradient underline decoration-primary-500/30">{DATA.name.split(' ')[1]}</span>
                             </h1>
-                            <p className="text-xl md:text-2xl text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
-                                {DATA.title} specializing in <span className="text-white font-bold">{DATA.subtitle}</span>.
+                            <p className="text-lg md:text-2xl text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+                                {DATA.title} specializing in <span className="text-primary-400 font-bold">{DATA.subtitle}</span>.
                             </p>
 
                             <div className="flex flex-wrap gap-4 mb-12 justify-center lg:justify-start">
@@ -461,12 +617,12 @@ const App: React.FC = () => {
                             </div>
                         </motion.div>
 
-                        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative flex-1">
-                            <div className="relative w-72 h-72 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] mx-auto">
-                                <div className="absolute inset-0 border-2 border-primary-500/20 rounded-3xl rotate-12 animate-pulse" />
-                                <div className="absolute inset-0 border-2 border-indigo-500/20 rounded-3xl -rotate-12 animate-pulse" />
-                                <div className="absolute inset-4 rounded-2xl overflow-hidden border-4 border-white/10 shadow-3xl group">
-                                    <img src={DATA.profileImage} alt={DATA.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-100" />
+                        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative flex-1 w-full flex justify-center">
+                            <div className="relative w-64 h-64 md:w-96 md:h-96 lg:w-[550px] lg:h-[550px]">
+                                <div className="absolute inset-0 border-2 border-primary-500/30 rounded-[2.5rem] rotate-6 animate-pulse" />
+                                <div className="absolute inset-0 border-2 border-indigo-500/30 rounded-[2.5rem] -rotate-6 animate-pulse" />
+                                <div className="absolute inset-3 rounded-[2rem] overflow-hidden border-4 border-white/10 shadow-3xl group">
+                                    <img src={DATA.profileImage} alt={DATA.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-110 group-hover:scale-100" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60" />
                                 </div>
                             </div>
@@ -477,28 +633,38 @@ const App: React.FC = () => {
 
             {/* Experience */}
             <section id="experience" className="py-24 bg-[#03081c]">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-4 md:px-6">
                     <SectionHeading subtitle="My professional journey in the tech industry.">Historical Path</SectionHeading>
                     <div className="space-y-6 max-w-5xl">
                         {DATA.experience.map((exp, i) => (
-                            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-card p-8 rounded-3xl flex flex-col md:flex-row gap-8 hover:border-primary-500/30 transition-all group">
-                                <div className="md:w-1/4 flex flex-col gap-4">
+                            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="glass-card p-6 md:p-10 rounded-[2rem] flex flex-col md:flex-row gap-6 md:gap-10 hover:border-primary-500/30 transition-all group">
+                                <div className="flex flex-row md:flex-col items-center md:items-start gap-4 md:w-1/4">
                                     {exp.logo && (
-                                        <div className="w-16 h-16 rounded-2xl bg-white/5 p-2 border border-white/10 flex items-center justify-center overflow-hidden">
+                                        <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-white/5 p-2 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
                                             <img src={exp.logo} alt={exp.company} className="w-full h-full object-contain" />
                                         </div>
                                     )}
-                                    <div>
-                                        <span className="text-primary-400 font-black text-sm uppercase tracking-widest block mb-2">{exp.period}</span>
-                                        <p className="text-slate-500 font-mono text-xs uppercase">{exp.location}</p>
+                                    <div className="flex-1">
+                                        <span className="text-primary-400 font-black text-xs md:text-sm uppercase tracking-[0.2em] block mb-1">{exp.period}</span>
+                                        <p className="text-slate-500 font-mono text-[10px] md:text-xs uppercase tracking-wider">{exp.location}</p>
                                     </div>
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-1 group-hover:text-primary-400 transition-colors italic">{exp.role}</h3>
-                                    <p className="text-slate-300 font-bold mb-6 uppercase tracking-wider">{exp.company}</p>
-                                    <ul className="space-y-3">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+                                        <h3 className="text-xl md:text-3xl font-black uppercase tracking-tight text-white group-hover:text-primary-400 transition-colors italic leading-tight">{exp.role}</h3>
+                                        {exp.certificateUrl && (
+                                            <button
+                                                onClick={() => openViewer(exp.certificateUrl!)}
+                                                className="self-start sm:self-center px-4 py-2 rounded-lg bg-primary-600/10 hover:bg-primary-600 text-primary-400 hover:text-white text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 border border-primary-500/20"
+                                            >
+                                                Verify <Award size={14} />
+                                            </button>
+                                        )}
+                                    </div>
+                                    <p className="text-slate-300 font-bold mb-6 uppercase tracking-widest text-sm md:text-base">{exp.company}</p>
+                                    <ul className="space-y-4">
                                         {exp.description.map((d, j) => (
-                                            <li key={j} className="text-slate-400 flex gap-4 text-base leading-relaxed">
+                                            <li key={j} className="text-slate-400 flex gap-3 text-sm md:text-base leading-relaxed">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 shrink-0 shadow-[0_0_8px_#0ea5e9]" /> {d}
                                             </li>
                                         ))}
@@ -512,12 +678,12 @@ const App: React.FC = () => {
 
             {/* Projects */}
             <section id="projects" className="py-24">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-4 md:px-6">
                     <SectionHeading subtitle="Digital architectures and full-stack solutions.">Selected Works</SectionHeading>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {DATA.projects.map((p, i) => (
-                            <motion.div key={i} whileHover={{ y: -10 }} className="glass-card rounded-3xl overflow-hidden flex flex-col group border-white/5">
-                                <div className="h-64 bg-slate-900 overflow-hidden relative">
+                            <motion.div key={i} whileHover={{ y: -10 }} className="glass-card rounded-[2rem] overflow-hidden flex flex-col group border-white/5">
+                                <div className="h-48 md:h-64 bg-slate-900 overflow-hidden relative">
                                     {p.image ? <img src={p.image} className="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 transition-all duration-700" />
                                         : <div className="w-full h-full flex items-center justify-center bg-primary-950/20"><Code2 size={48} className="text-primary-800" /></div>}
                                     <div className="absolute bottom-4 left-4 flex gap-2">
@@ -540,11 +706,11 @@ const App: React.FC = () => {
 
             {/* Skills */}
             <section id="skills" className="py-24 bg-[#03081c]">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-4 md:px-6">
                     <SectionHeading subtitle="Technological weapons of choice.">The Stack</SectionHeading>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {Object.entries(DATA.skills).map(([title, skills], i) => (
-                            <motion.div key={i} className="glass-card p-8 rounded-3xl border-white/5 hover:border-primary-500/20 transition-all">
+                            <motion.div key={i} className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 hover:border-primary-500/20 transition-all">
                                 <h3 className="text-lg font-black uppercase tracking-widest mb-8 text-primary-500 flex items-center gap-3">
                                     {title === 'frontend' && <Layers size={20} />}
                                     {title === 'backend' && <Database size={20} />}
@@ -570,14 +736,24 @@ const App: React.FC = () => {
 
             {/* Certs & Edu */}
             <section className="py-24 bg-[#020617]">
-                <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                <div className="container mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
                     <div>
                         <SectionHeading>Credentials</SectionHeading>
                         <div className="space-y-4">
                             {DATA.certifications.map((c, i) => (
-                                <div key={i} className="flex items-center gap-4 p-5 glass-card rounded-2xl border-white/5 hover:border-primary-500/20 transition-all cursor-default group">
-                                    <Award className="text-primary-500 group-hover:scale-110 transition-transform" size={24} />
-                                    <span className="text-slate-300 font-bold uppercase tracking-tight text-sm">{c}</span>
+                                <div
+                                    key={i}
+                                    onClick={() => c.url !== "#" && (c.url.startsWith('http') ? window.open(c.url, '_blank') : openViewer(c.url))}
+                                    className={`flex items-center justify-between p-5 glass-card rounded-2xl border-white/5 hover:border-primary-500/20 transition-all group ${c.url !== "#" ? 'cursor-pointer' : 'cursor-default'}`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <Award className="text-primary-500 group-hover:scale-110 transition-transform" size={24} />
+                                        <div>
+                                            <span className="text-slate-300 font-bold uppercase tracking-tight text-sm block">{c.title}</span>
+                                            <span className="text-slate-500 text-[10px] uppercase font-mono">{c.issuer}</span>
+                                        </div>
+                                    </div>
+                                    {c.url !== "#" && <ExternalLink size={14} className="text-slate-600 group-hover:text-primary-400 transition-colors" />}
                                 </div>
                             ))}
                         </div>
@@ -609,7 +785,7 @@ const App: React.FC = () => {
             {/* Contact */}
             <section id="contact" className="py-24 relative overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-[120px] pointer-events-none" />
-                <div className="container mx-auto px-6 relative z-10 text-center">
+                <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
                     <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter mb-8 leading-none">Initiate <span className="text-gradient underline decoration-primary-500/20">Contact</span></h2>
                     <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-16 uppercase tracking-widest font-light">Nagpur-based Engineering • Full Stack Solutions • Global Outreach</p>
 
@@ -628,7 +804,7 @@ const App: React.FC = () => {
             </section>
 
             <footer className="py-20 border-t border-white/5 text-center">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto px-4 md:px-6">
                     <span className="text-3xl font-black text-gradient italic tracking-tighter">MAHESH SHINDE</span>
                     <p className="text-slate-600 text-[10px] uppercase tracking-[0.3em] mt-4 font-bold">Build • Deploy • Scale • Repeat</p>
                 </div>
