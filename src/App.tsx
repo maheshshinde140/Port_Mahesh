@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import CursorAnimation from './components/CursorAnimation';
+import CyberFooter from './components/CyberFooter';
 import {
     Github,
     Linkedin,
@@ -80,7 +82,7 @@ const DATA: {
 } = {
     name: "Mahesh Shinde",
     title: "Full Stack Software Engineer",
-    subtitle: "MERN • MEAN • Cloud • DevOps",
+    subtitle: "MERN | MEAN | Cloud | DevOps",
     profileImage: "/profile.png",
     contact: {
         phone: "+91-7057115093",
@@ -92,14 +94,14 @@ const DATA: {
         {
             school: "Tulsiramji Gaikwad Patil College of Engineering and Technology, Nagpur",
             degree: "B.Tech in Computer Science and Engineering",
-            period: "2022 – 2025",
+            period: "2022 - 2025",
             grade: "CGPA: 8.8",
             logo: "/tgpcet.jpg"
         },
         {
             school: "Yeshwant Mahavidyalaya, Nanded",
             degree: "12th (Physics, Chemistry, Mathematics)",
-            period: "2020 – 2021",
+            period: "2020 - 2021",
             grade: "92.5%",
             logo: "/yeshwant.jpg"
         },
@@ -115,7 +117,7 @@ const DATA: {
         {
             company: "DigitalHut Automations Pvt.Ltd (HarIT Tech Solution)",
             role: "Full Stack Developer Intern",
-            period: "Dec 2024 – Mar 2025",
+            period: "Dec 2024 - Mar 2025",
             location: "Nagpur, Maharashtra",
             logo: "https://tnpportal.harittech.in/static/media/harit.feeaf3f71a001be729ef.png",
             certificateUrl: "/certs/digitalhut.pdf",
@@ -128,7 +130,7 @@ const DATA: {
         {
             company: "Arohi Software",
             role: "Full Stack Developer Intern",
-            period: "Mar 2024 – Aug 2024",
+            period: "Mar 2024 - Aug 2024",
             location: "Shrigonda, Maharashtra",
             logo: "https://avatars.githubusercontent.com/u/169677699?v=4",
             certificateUrl: "/certs/arohi.pdf",
@@ -140,7 +142,7 @@ const DATA: {
         {
             company: "EduSkills Foundation",
             role: "Intelligent Automation Virtual Intern (BluePrism)",
-            period: "Apr 2024 – Jun 2024",
+            period: "Apr 2024 - Jun 2024",
             location: "Remote",
             logo: "https://eduskillsfoundation.org/wp-content/uploads/2022/09/LOGO_EduSkills.png",
             certificateUrl: "/certs/intelligent_automation.pdf",
@@ -152,7 +154,7 @@ const DATA: {
         {
             company: "EduSkills Foundation",
             role: "AI/ML Virtual Intern",
-            period: "Jan 2024 – Mar 2024",
+            period: "Jan 2024 - Mar 2024",
             location: "Remote",
             logo: "https://eduskillsfoundation.org/wp-content/uploads/2022/09/LOGO_EduSkills.png",
             certificateUrl: "/certs/ai_ml_internship.pdf",
@@ -164,7 +166,7 @@ const DATA: {
         {
             company: "Clustor Computing",
             role: "Full Stack Web Development Intern",
-            period: "Jan 2024 – Feb 2024",
+            period: "Jan 2024 - Feb 2024",
             location: "Nagpur, Maharashtra",
             logo: "/clustor.jpg",
             certificateUrl: "/certs/clustor.pdf",
@@ -176,7 +178,7 @@ const DATA: {
         {
             company: "Slash Mark",
             role: "Frontend Intern",
-            period: "Dec 2023 – Mar 2024",
+            period: "Dec 2023 - Mar 2024",
             location: "Hyderabad, Telangana",
             logo: "https://slashmark.in/partnerimages/slashmarkmainlogo.png",
             certificateUrl: "/certs/slashmark.pdf",
@@ -305,7 +307,7 @@ const Navbar = () => {
     }, []);
 
     const navLinks = [
-        { name: 'About', href: '#background' },
+        { name: 'About', href: '#about' },
         { name: 'Experience', href: '#experience' },
         { name: 'Projects', href: '#projects' },
         { name: 'Skills', href: '#skills' },
@@ -324,7 +326,15 @@ const Navbar = () => {
                     ))}
                     <a href="#contact" className="px-5 py-2 rounded-full bg-primary-600 hover:bg-primary-500 text-white text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-primary-900/20">Hire Me</a>
                 </div>
-                <button className="md:hidden text-slate-300" onClick={() => setIsOpen(!isOpen)}>{isOpen ? <X /> : <Menu />}</button>
+                <button
+                    className="md:hidden text-slate-300"
+                    onClick={() => setIsOpen(!isOpen)}
+                    aria-expanded={isOpen}
+                    aria-controls="mobile-menu"
+                    aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                >
+                    {isOpen ? <X /> : <Menu />}
+                </button>
             </div>
             <AnimatePresence>
                 {isOpen && (
@@ -334,6 +344,7 @@ const Navbar = () => {
                         exit={{ opacity: 0, x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                         className="fixed inset-0 z-40 md:hidden bg-[#020617]/95 backdrop-blur-2xl"
+                        id="mobile-menu"
                     >
                         <div className="flex flex-col items-center justify-center h-full gap-10">
                             {navLinks.map((link, i) => (
@@ -385,11 +396,11 @@ const ContactForm = () => {
     const [result, setResult] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-    const onSubmit = async (event: any) => {
+    const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setStatus("loading");
-        setResult("Sending....");
-        const formData = new FormData(event.target);
+        setResult("Sending...");
+        const formData = new FormData(event.currentTarget);
         formData.append("access_key", "a849a92b-8d67-44d9-b6ac-ed0fcb8b90fe");
 
         try {
@@ -402,7 +413,7 @@ const ContactForm = () => {
             if (data.success) {
                 setStatus("success");
                 setResult("Message sent successfully!");
-                event.target.reset();
+                event.currentTarget.reset();
                 setTimeout(() => {
                     setResult("");
                     setStatus("idle");
@@ -429,29 +440,34 @@ const ContactForm = () => {
             <form onSubmit={onSubmit} className="space-y-8 text-left relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Full Name</label>
+                        <label htmlFor="name" className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Full Name</label>
                         <input
+                            id="name"
                             type="text"
                             name="name"
                             required
+                            autoComplete="name"
                             placeholder="Your Name"
                             className="w-full bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all font-medium"
                         />
                     </div>
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Email Address</label>
+                        <label htmlFor="email" className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Email Address</label>
                         <input
+                            id="email"
                             type="email"
                             name="email"
                             required
+                            autoComplete="email"
                             placeholder="hello@example.com"
                             className="w-full bg-slate-900/50 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/10 transition-all font-medium"
                         />
                     </div>
                 </div>
                 <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Message</label>
+                    <label htmlFor="message" className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500 ml-1">Message</label>
                     <textarea
+                        id="message"
                         name="message"
                         required
                         rows={5}
@@ -486,6 +502,8 @@ const ContactForm = () => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
+                                role="status"
+                                aria-live="polite"
                                 className={`flex items-center gap-2 px-6 py-3 rounded-full border ${status === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
                                     } text-xs font-bold uppercase tracking-widest`}
                             >
@@ -503,6 +521,10 @@ const ContactForm = () => {
 const PDFViewerModal = ({ url, isOpen, onClose }: { url: string; isOpen: boolean; onClose: () => void }) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+                return;
+            }
             if ((e.ctrlKey && (e.key === 'p' || e.key === 's')) || e.key === 'F12') {
                 e.preventDefault();
                 alert("Downloading and printing is disabled for security reasons.");
@@ -516,7 +538,7 @@ const PDFViewerModal = ({ url, isOpen, onClose }: { url: string; isOpen: boolean
             window.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, onClose]);
 
     if (!isOpen) return null;
 
@@ -533,6 +555,7 @@ const PDFViewerModal = ({ url, isOpen, onClose }: { url: string; isOpen: boolean
                     <h3 className="text-xl font-black uppercase italic tracking-widest text-primary-500">Document Viewer</h3>
                     <button
                         onClick={onClose}
+                        aria-label="Close document viewer"
                         className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
                     >
                         <X size={24} />
@@ -550,7 +573,7 @@ const PDFViewerModal = ({ url, isOpen, onClose }: { url: string; isOpen: boolean
                 </div>
 
                 <div className="p-4 bg-primary-600/10 text-center">
-                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary-400">Secure Viewing Mode Active • Download Disabled</p>
+                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary-400">Secure Viewing Mode Active | Download Disabled</p>
                 </div>
             </div>
         </motion.div>
@@ -568,6 +591,7 @@ const App: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#020617] text-slate-100 selection:bg-primary-500/30">
+            <CursorAnimation />
             <Navbar />
 
             <AnimatePresence>
@@ -580,6 +604,7 @@ const App: React.FC = () => {
                 )}
             </AnimatePresence>
 
+            <main>
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
                 <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-600/20 rounded-full blur-[128px] animate-pulse" />
@@ -610,8 +635,8 @@ const App: React.FC = () => {
                                     View Resume <FileText size={20} />
                                 </motion.a>
                                 <div className="flex gap-4">
-                                    {[{ icon: <Github size={24} />, href: DATA.contact.github }, { icon: <Linkedin size={24} />, href: DATA.contact.linkedin }].map((s, i) => (
-                                        <motion.a key={i} href={s.href} target="_blank" whileHover={{ y: -5, scale: 1.1 }} className="w-14 h-14 glass-card rounded-xl flex items-center justify-center text-slate-300 hover:text-primary-400 border-white/10 hover:border-primary-500/50 transition-all">{s.icon}</motion.a>
+                                    {[{ icon: <Github size={24} />, href: DATA.contact.github, label: "GitHub" }, { icon: <Linkedin size={24} />, href: DATA.contact.linkedin, label: "LinkedIn" }].map((s, i) => (
+                                        <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} whileHover={{ y: -5, scale: 1.1 }} className="w-14 h-14 glass-card rounded-xl flex items-center justify-center text-slate-300 hover:text-primary-400 border-white/10 hover:border-primary-500/50 transition-all">{s.icon}</motion.a>
                                     ))}
                                 </div>
                             </div>
@@ -631,8 +656,94 @@ const App: React.FC = () => {
                 </div>
             </section>
 
+            {/* About */}
+            <section id="about" className="py-24 bg-[#03081c]">
+                <div className="container mx-auto px-4 md:px-6">
+                    <SectionHeading subtitle="Engineer focused on building production-ready products with measurable outcomes.">About Me</SectionHeading>
+                    <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
+                        <motion.article
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="glass-card rounded-[2rem] p-8 md:p-10 xl:col-span-3 border-white/5"
+                        >
+                            <p className="text-primary-400 text-xs font-black uppercase tracking-[0.25em] mb-4">Profile</p>
+                            <h3 className="text-2xl md:text-4xl font-black uppercase italic tracking-tight mb-6 leading-tight">
+                                Full Stack Engineer Building High-Trust, High-Performance Products
+                            </h3>
+                            <p className="text-slate-300 leading-relaxed text-base md:text-lg mb-8">
+                                I design and deliver end-to-end web applications using React, Node.js, and modern cloud workflows.
+                                My focus is practical engineering: secure APIs, scalable architecture, fast interfaces, and smooth deployment pipelines.
+                                I care about product outcomes, not just shipping code.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {[
+                                    { icon: <Layers size={18} />, title: "Frontend Systems", detail: "Responsive UI with strong interaction quality and accessibility." },
+                                    { icon: <Database size={18} />, title: "Backend Architecture", detail: "Clean APIs, robust auth flows, and production-grade data modeling." },
+                                    { icon: <Cloud size={18} />, title: "Delivery & Cloud", detail: "Deployment-ready workflows with performance and reliability focus." }
+                                ].map((item) => (
+                                    <div key={item.title} className="rounded-2xl bg-slate-900/40 border border-white/5 p-4">
+                                        <div className="w-9 h-9 rounded-xl bg-primary-500/15 text-primary-400 flex items-center justify-center mb-3">
+                                            {item.icon}
+                                        </div>
+                                        <p className="text-sm font-black uppercase tracking-wide text-white mb-2">{item.title}</p>
+                                        <p className="text-xs text-slate-400 leading-relaxed">{item.detail}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.article>
+
+                        <div className="xl:col-span-2 grid grid-cols-1 gap-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.05 }}
+                                className="glass-card rounded-[2rem] p-8 border-white/5"
+                            >
+                                <h3 className="text-sm uppercase tracking-[0.2em] text-primary-400 font-black mb-4">Impact Snapshot</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {[
+                                        { value: "6+", label: "Internships" },
+                                        { value: "5+", label: "Major Projects" },
+                                        { value: "8.8", label: "CGPA" },
+                                        { value: "100%", label: "Responsive UI" }
+                                    ].map((fact) => (
+                                        <div key={fact.label} className="rounded-xl border border-white/5 bg-slate-900/30 p-4 text-center">
+                                            <p className="text-2xl font-black text-white">{fact.value}</p>
+                                            <p className="text-[10px] uppercase tracking-[0.16em] text-slate-400 mt-1">{fact.label}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.1 }}
+                                className="glass-card rounded-[2rem] p-8 border-white/5"
+                            >
+                                <h3 className="text-sm uppercase tracking-[0.2em] text-primary-400 font-black mb-4">What Next</h3>
+                                <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                                    Looking for frontend-heavy, full stack, or product engineering roles where I can contribute quickly and scale systems responsibly.
+                                </p>
+                                <div className="flex flex-wrap gap-3">
+                                    <a href="#projects" className="px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-xs font-black uppercase tracking-wider transition-all">
+                                        View Work
+                                    </a>
+                                    <a href="#contact" className="px-4 py-2 rounded-xl border border-white/10 hover:border-primary-500/40 text-slate-300 hover:text-white text-xs font-black uppercase tracking-wider transition-all">
+                                        Contact Me
+                                    </a>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Experience */}
-            <section id="experience" className="py-24 bg-[#03081c]">
+            <section id="experience" className="py-24">
                 <div className="container mx-auto px-4 md:px-6">
                     <SectionHeading subtitle="My professional journey in the tech industry.">Historical Path</SectionHeading>
                     <div className="space-y-6 max-w-5xl">
@@ -684,7 +795,7 @@ const App: React.FC = () => {
                         {DATA.projects.map((p, i) => (
                             <motion.div key={i} whileHover={{ y: -10 }} className="glass-card rounded-[2rem] overflow-hidden flex flex-col group border-white/5">
                                 <div className="h-48 md:h-64 bg-slate-900 overflow-hidden relative">
-                                    {p.image ? <img src={p.image} className="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 transition-all duration-700" />
+                                    {p.image ? <img src={p.image} alt={`${p.title} preview`} loading="lazy" className="w-full h-full object-cover object-top opacity-60 group-hover:opacity-100 transition-all duration-700" />
                                         : <div className="w-full h-full flex items-center justify-center bg-primary-950/20"><Code2 size={48} className="text-primary-800" /></div>}
                                     <div className="absolute bottom-4 left-4 flex gap-2">
                                         {p.tech.slice(0, 3).map(t => <span key={t} className="px-2 py-1 bg-black/60 backdrop-blur-md rounded-md text-[10px] uppercase font-bold text-primary-400 tracking-tighter">{t}</span>)}
@@ -696,7 +807,11 @@ const App: React.FC = () => {
                                         <span className="text-xs font-mono text-slate-600">{p.year}</span>
                                     </div>
                                     <p className="text-slate-400 text-sm mb-8 flex-1 leading-relaxed">{p.description}</p>
-                                    <a href={p.link} target="_blank" className="flex items-center gap-2 text-white font-bold uppercase tracking-widest text-xs hover:text-primary-400 transition-all">View Project <ExternalLink size={14} /></a>
+                                    {p.link !== "#" ? (
+                                        <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-bold uppercase tracking-widest text-xs hover:text-primary-400 transition-all">View Project <ExternalLink size={14} /></a>
+                                    ) : (
+                                        <span className="flex items-center gap-2 text-slate-500 font-bold uppercase tracking-widest text-xs">Private Project</span>
+                                    )}
                                 </div>
                             </motion.div>
                         ))}
@@ -741,10 +856,12 @@ const App: React.FC = () => {
                         <SectionHeading>Credentials</SectionHeading>
                         <div className="space-y-4">
                             {DATA.certifications.map((c, i) => (
-                                <div
+                                <button
                                     key={i}
-                                    onClick={() => c.url !== "#" && (c.url.startsWith('http') ? window.open(c.url, '_blank') : openViewer(c.url))}
-                                    className={`flex items-center justify-between p-5 glass-card rounded-2xl border-white/5 hover:border-primary-500/20 transition-all group ${c.url !== "#" ? 'cursor-pointer' : 'cursor-default'}`}
+                                    onClick={() => c.url !== "#" && (c.url.startsWith('http') ? window.open(c.url, '_blank', 'noopener,noreferrer') : openViewer(c.url))}
+                                    type="button"
+                                    disabled={c.url === "#"}
+                                    className={`w-full text-left flex items-center justify-between p-5 glass-card rounded-2xl border-white/5 hover:border-primary-500/20 transition-all group ${c.url !== "#" ? 'cursor-pointer' : 'cursor-default opacity-60'}`}
                                 >
                                     <div className="flex items-center gap-4">
                                         <Award className="text-primary-500 group-hover:scale-110 transition-transform" size={24} />
@@ -754,7 +871,7 @@ const App: React.FC = () => {
                                         </div>
                                     </div>
                                     {c.url !== "#" && <ExternalLink size={14} className="text-slate-600 group-hover:text-primary-400 transition-colors" />}
-                                </div>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -787,7 +904,7 @@ const App: React.FC = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-[120px] pointer-events-none" />
                 <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
                     <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter mb-8 leading-none">Initiate <span className="text-gradient underline decoration-primary-500/20">Contact</span></h2>
-                    <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-16 uppercase tracking-widest font-light">Nagpur-based Engineering • Full Stack Solutions • Global Outreach</p>
+                    <p className="text-slate-400 text-xl max-w-2xl mx-auto mb-16 uppercase tracking-widest font-light">Nagpur-based engineering | Full stack solutions | Global outreach</p>
 
                     <div className="grid grid-cols-1 gap-16 items-start">
                         <ContactForm />
@@ -802,15 +919,12 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </section>
+            </main>
 
-            <footer className="py-20 border-t border-white/5 text-center">
-                <div className="container mx-auto px-4 md:px-6">
-                    <span className="text-3xl font-black text-gradient italic tracking-tighter">MAHESH SHINDE</span>
-                    <p className="text-slate-600 text-[10px] uppercase tracking-[0.3em] mt-4 font-bold">Build • Deploy • Scale • Repeat</p>
-                </div>
-            </footer>
+            <CyberFooter />
         </div>
     );
 };
 
 export default App;
+
