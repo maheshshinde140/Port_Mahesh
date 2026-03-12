@@ -26,6 +26,7 @@ interface Project {
     title: string;
     description: string;
     link: string;
+    github?: string;
     tech: string[];
     year: string;
     image?: string;
@@ -190,9 +191,27 @@ const DATA: {
     ],
     projects: [
         {
+            title: "Blog Rival",
+            description: "Modern blogging website with secure and modern tools built with a perfect structure.",
+            link: "https://blog-rival-frontend.vercel.app/feed",
+            github: "https://github.com/maheshshinde140/Blog-Rival",
+            tech: ["MERN Stack", "Modern Tools", "Security Tools"],
+            year: "Mar 2026",
+            image: "/projects/blog-rival.png"
+        },
+        {
+            title: "E-Tapalwala",
+            description: "Modernization of manual file handling work for the Collector of Nanded, Maharashtra under \"VittuConnect\". A confidential internal MERN stack application.",
+            link: "https://www.etapalwala.in/",
+            tech: ["MERN Stack"],
+            year: "Jan 2026",
+            image: "/projects/etapalwala.png"
+        },
+        {
             title: "TNP Portal",
             description: "Comprehensive Training & Placement System with role-based access, automated workflows, and real-time dashboards for students and admins.",
             link: "https://tnpportal.harittech.in",
+            github: "https://github.com/HarITTech/Placements",
             tech: ["React", "Node.js", "Express", "MongoDB", "JWT"],
             year: "2024",
             image: "/projects/tnp.png"
@@ -201,6 +220,7 @@ const DATA: {
             title: "UPSCBeacon",
             description: "UPSC exam preparation portal featuring mock tests, study materials, and an advanced admin panel for content management and user analytics.",
             link: "https://upscbeacon.vercel.app",
+            github: "https://github.com/maheshshinde140/UPSCBEACON",
             tech: ["MERN", "Tailwind CSS", "Redux", "JWT"],
             year: "2024",
             image: "/projects/upsc.png"
@@ -209,6 +229,7 @@ const DATA: {
             title: "AaramSe App",
             description: "A cross-platform mobile application for real-time appointment tracking and queue management.",
             link: "#",
+            github: "https://github.com/maheshshinde140/AaramSe",
             tech: ["React Native", "Expo", "React Navigation", "Node.js"],
             year: "2024"
         },
@@ -216,6 +237,7 @@ const DATA: {
             title: "RooMoo",
             description: "A visually rich rental room booking platform with advanced search filtering and intuitive booking logic.",
             link: "https://roomooo.onrender.com",
+            github: "https://github.com/maheshshinde140/RooMoo-FullStack",
             tech: ["React", "Tailwind CSS", "Framer Motion"],
             year: "2023",
             image: "/projects/roomoo.png"
@@ -224,6 +246,7 @@ const DATA: {
             title: "Aapla Bajar",
             description: "Modern E-commerce marketplace prototype with product listings and integrated shopping cart.",
             link: "https://aaplabaazar.vercel.app",
+            github: "https://github.com/maheshshinde140/apalabazar",
             tech: ["Next.js", "Stripe", "MongoDB", "Tailwind CSS"],
             year: "2024",
             image: "/projects/aaplabaazar.png"
@@ -807,11 +830,22 @@ const App: React.FC = () => {
                                         <span className="text-xs font-mono text-slate-600">{p.year}</span>
                                     </div>
                                     <p className="text-slate-400 text-sm mb-8 flex-1 leading-relaxed">{p.description}</p>
-                                    {p.link !== "#" ? (
-                                        <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-bold uppercase tracking-widest text-xs hover:text-primary-400 transition-all">View Project <ExternalLink size={14} /></a>
-                                    ) : (
-                                        <span className="flex items-center gap-2 text-slate-500 font-bold uppercase tracking-widest text-xs">Private Project</span>
-                                    )}
+                                    <div className="flex items-center flex-wrap gap-4 mt-auto">
+                                        {p.link !== "#" ? (
+                                            <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-bold uppercase tracking-widest text-xs hover:text-primary-400 transition-all">
+                                                View Project <ExternalLink size={14} />
+                                            </a>
+                                        ) : (
+                                            <span className="flex items-center gap-2 text-slate-500 font-bold uppercase tracking-widest text-xs">
+                                                Private Project
+                                            </span>
+                                        )}
+                                        {p.github && (
+                                            <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-slate-300 font-bold uppercase tracking-widest text-xs hover:text-white transition-all ml-auto">
+                                                Code <Github size={14} />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
